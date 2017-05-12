@@ -50,7 +50,7 @@ class Inspect extends \Robo\Task\Docker\Base implements \Robo\Contract\Verbosity
 			throw new \Exception("Invalid container name {$this->cid}");
 		}
 
-		return boolval(trim($result->getMessage()));
+		return filter_var(trim($result->getMessage()), FILTER_VALIDATE_BOOLEAN);
 	}
 
 	/**
