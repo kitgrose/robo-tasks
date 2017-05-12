@@ -87,6 +87,25 @@ class MySql extends \IQ\Robo\Task\CommandStack
 		return $this->databaseName;
 	}
 
+	public function isRunning() {
+		$command = array_merge(
+			array(
+				'mysql'
+			),
+			$this->getDatabaseConnectionOptions(false),
+			array(
+				'--execute="QUIT"'
+			)
+		);
+
+		$this->suppressOutput = true;
+		$result = $this->exec($command)->silent(true)->run()->wasSuccessful();
+		$this->silent(false);
+		$this->suppressOutput = false;
+
+		return $result;
+	}
+
 	public function exists() {
 		$command = array_merge(
 			array(

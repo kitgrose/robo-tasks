@@ -2,8 +2,6 @@
 
 namespace IQ\Robo\Task;
 
-use Robo\Task\CommandStack
-
 // Exists just to respect the `isMetadataPrinted` property for `run()`
 abstract class CommandStack extends \Robo\Task\CommandStack
 {
