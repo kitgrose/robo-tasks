@@ -6,7 +6,7 @@ trait loadTasks
     /**
      * @param string|\Robo\Task\Docker\Result $cidOrResult
      *
-     * @return \Robo\Task\Docker\Port
+     * @return \IQ\Robo\Task\Docker\Port
      */
     protected function taskDockerPort($cidOrResult)
     {
@@ -16,10 +16,18 @@ trait loadTasks
     /**
      * @param string|\Robo\Task\Docker\Result $cidOrResult
      *
-     * @return \Robo\Task\Docker\Inspect
+     * @return \IQ\Robo\Task\Docker\Inspect
      */
     protected function taskDockerInspect($cidOrResult)
     {
         return $this->task(Inspect::class, $cidOrResult);
+    }
+
+    /**
+     * @return \IQ\Robo\Task\Docker\Compose
+     */
+    protected function taskDockerCompose()
+    {
+        return $this->task(Compose::class);
     }
 }
