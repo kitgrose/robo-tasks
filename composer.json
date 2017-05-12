@@ -1,0 +1,20 @@
+{
+    "name": "kitgrose/robo-tasks",
+    "description": "Custom Tasks for Robo Task Runner",
+    "type": "robo-tasks",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kit Grose",
+            "email": "kit@studioiq.com.au"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "IQ\\Robo\\": "src"
+        }
+    },
+    "require": {
+        "consolidation/Robo": "~1"
+    }
+}
