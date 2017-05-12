@@ -36,10 +36,9 @@ class Port extends \Robo\Task\Docker\Base
 	 *
 	 * @return $this
 	 */
-	public function port($internalPortNumber)
+	public function externalPort($internalPortNumber)
 	{
 		$this->internalPortNumber = $internalPortNumber;
-		$this->run = $this->receiveCommand($this->command);
 		return trim($this->silent(true)->run()->getMessage());
 	}
 
