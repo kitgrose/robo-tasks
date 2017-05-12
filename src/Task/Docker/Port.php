@@ -37,7 +37,7 @@ class Port extends \Robo\Task\Docker\Base
 	}
 
 	/**
-	 * @param int $internalPortNumber
+	 * @param int|string $internalPortNumber
 	 *
 	 * @return int
      *
@@ -45,10 +45,14 @@ class Port extends \Robo\Task\Docker\Base
 	 */
 	public function externalPort($internalPortNumber)
 	{
+		if(!preg_match('/^\d+(\/(tcp|udp|all))?$/', $internalPortNumber)) {
+			throw new TaskException($this, 'Invalid internal port number');
+		}
+
 		$this->internalPortNumber = $internalPortNumber;
 		$result = trim($this->silent(true)->run()->getMessage());
 		if(empty($result)) {
-			throw new TaskException($this, 'Invalid internal port number');
+			throw new TaskException($this, 'Internal port number not mapped');
 		}
 
 		return intval($result);
@@ -59,6 +63,6 @@ class Port extends \Robo\Task\Docker\Base
 	 */
 	public function getCommand()
 	{
-		return $this->command . (!empty($this->internalPortNumber) ? " | grep '^{$this->internalPortNumber}[/ ]' | cut -d : -f 2" : '');
+		return $this->command . (!empty($this->internalPortNumber) ? " {$this->internalPortNumber} | cut -d : -f 2" : '');
 	}
 }
