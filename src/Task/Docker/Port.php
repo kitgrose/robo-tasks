@@ -2,7 +2,8 @@
 namespace IQ\Robo\Task\Docker;
 
 use Robo\Task\Docker;
-use \Robo\Common\CommandReceiver;
+use Robo\Common\CommandReceiver;
+use Robo\Exception\TaskException;
 
 /**
  * Gets port information for a running Docker container
@@ -10,7 +11,11 @@ use \Robo\Common\CommandReceiver;
  * ```php
  * <?php
  * $this->taskDockerPort('test_env')
- *      ->externalPort('[internalPortNumber]');
+ *      ->run();
+ *
+ *
+ * $this->taskDockerPort('test_env')
+ *      ->externalPort([internalPortNumber]);
  *
  * ?>
  * ```
@@ -32,14 +37,21 @@ class Port extends \Robo\Task\Docker\Base
 	}
 
 	/**
-	 * @param string|\Robo\Contract\CommandInterface $command
+	 * @param int $internalPortNumber
 	 *
-	 * @return $this
+	 * @return int
+     *
+     * @throws \Robo\Exception\TaskException
 	 */
 	public function externalPort($internalPortNumber)
 	{
 		$this->internalPortNumber = $internalPortNumber;
-		return trim($this->silent(true)->run()->getMessage());
+		$result = trim($this->silent(true)->run()->getMessage());
+		if(empty($result)) {
+			throw new TaskException($this, 'Invalid internal port number');
+		}
+
+		return intval($result);
 	}
 
 	/**
@@ -47,6 +59,6 @@ class Port extends \Robo\Task\Docker\Base
 	 */
 	public function getCommand()
 	{
-		return $this->command . (!empty($this->internalPortNumber) ? " | grep {$this->internalPortNumber} | cut -d : -f 2" : '');
+		return $this->command . (!empty($this->internalPortNumber) ? " | grep '^{$this->internalPortNumber}[/ ]' | cut -d : -f 2" : '');
 	}
 }
